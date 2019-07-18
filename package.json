@@ -1,0 +1,24 @@
+{
+  "name": "react-native-modal-select-list",
+  "version": "1.0.0",
+  "description": "️☝️ React Native modal component to select options from list",
+  "main": "src/index.js",
+  "repository": "https://github.com/ffrm/react-native-modal-options.git",
+  "author": "Fernando Rama <fernandorama.dev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "styled-components": "^4.3.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-native": "^0.60.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2"
+  }
+}
