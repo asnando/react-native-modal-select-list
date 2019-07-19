@@ -8,17 +8,44 @@ import {
   ModalSelectList,
 } from 'react-native-modal-select-list';
 
-const staticModalOptions = [
-  {
-    label: 'Orange', value: 'orange',
-  },
-  {
-    label: 'Apple', value: 'apple',
-  },
-  {
-    label: 'Watermelon', value: 'watermelon',
+console.disableYellowBox = true;
+
+const createRandomString = (length = 10) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-];
+  return result;
+};
+
+const createStaticModalOptions = () => {
+  const options = [];
+  for (let i = 0; i < 20; i++) {
+    const word = createRandomString();
+    options.push({ label: word, value: word });
+  }
+  return options;
+};
+
+const modalOptionsProvider = ({ page, pageSize, text }) => {
+  let options = [];
+  for (let i = 0; i < pageSize; i++) {
+    const randomString = createRandomString();
+    // const index = (i + (pageSize * (page - 1)));
+    options.push({
+      label: randomString,
+      value: randomString,
+    });
+  }
+  if (!!text) {
+    options = options.filter(option => new RegExp(`^.*?(${text}).*?$`).test(option.label));
+  }
+  return new Promise(resolve => setTimeout(() => resolve(options), 1000));
+};
+
+const staticModalOptions = createStaticModalOptions();
 
 const App = () => {
   let modalRef;
@@ -34,10 +61,12 @@ const App = () => {
       </SafeAreaView>
       <ModalSelectList
         ref={saveModalRef}
-        placeholder={"Try something..."}
-        closeButtonText={"Fechar"}
+        placeholder={"Text something..."}
+        closeButtonText={"Close"}
         options={staticModalOptions}
         onSelectedOption={onSelectedOption}
+        disableTextSearch={false}
+        provider={modalOptionsProvider}
       />
     </Fragment>
   );
