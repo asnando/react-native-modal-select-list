@@ -29,7 +29,9 @@ const createStaticModalOptions = () => {
   return options;
 };
 
-const modalOptionsProvider = ({ page, pageSize, text }) => {
+const modalOptionsProvider = (args) => {
+  console.log(args);
+  const { page, pageSize, text } = args;
   let options = [];
   for (let i = 0; i < pageSize; i++) {
     const randomString = createRandomString();
@@ -44,6 +46,10 @@ const modalOptionsProvider = ({ page, pageSize, text }) => {
   }
   return new Promise(resolve => setTimeout(() => resolve(options), 1000));
 };
+
+const resolveFilters = () => ({
+  a: 1,
+});
 
 const staticModalOptions = createStaticModalOptions();
 
@@ -67,6 +73,9 @@ const App = () => {
         onSelectedOption={onSelectedOption}
         disableTextSearch={false}
         provider={modalOptionsProvider}
+        pageSize={40}
+        inputName="customFilterKey"
+        filter={resolveFilters}
       />
     </Fragment>
   );

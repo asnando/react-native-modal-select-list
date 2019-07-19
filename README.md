@@ -48,6 +48,7 @@ const App = () => {
 
 # Options object format
 The options (from the static list or from the resolver returned value) must be an object containing the following key definitions:
+
 | Key | Type | Description |
 | --- | ---- | ----------- |
 | label | String | Text to be displayed on the row.

@@ -54,12 +54,37 @@ class SelectListContent extends PureComponent {
 
   getOptionsFromProvider(text) {
     const { page } = this.state;
-    const { provider, pageSize } = this.props;
-    const value = provider({
+
+    const {
+      provider,
+      pageSize,
+      inputName,
+      filter,
+    } = this.props;
+
+    let providerOptions = {
       page,
       pageSize,
-      text,
-    });
+      [inputName]: text,
+    };
+
+    // Extends the object containing additional filter keys
+    // to pass down to the provider function.
+    if (filter !== null && typeof filter !== 'undefined') {
+      if (typeof filter === 'function') {
+        providerOptions = {
+          ...providerOptions,
+          ...filter(),
+        };
+      }
+      providerOptions = {
+        ...providerOptions,
+        ...filter,
+      };
+    }
+
+    const value = provider(providerOptions);
+
     if (value && typeof value.then === 'function') {
       return value.then((options) => {
         return this.addOptionsToList(options, () => {
