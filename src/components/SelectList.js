@@ -29,6 +29,8 @@ class SelectList extends PureComponent {
       inputName,
       filter,
       disableTextSearch,
+      headerTintColor,
+      buttonTextColor,
     } = this.props;
     return (
       <SelectListContainer>
@@ -38,6 +40,8 @@ class SelectList extends PureComponent {
           disableTextSearch={disableTextSearch}
           onCloseModalRequest={onCloseModalRequest}
           onHeaderInputChangeText={(...args) => this.handleHeaderInputChangeText(...args)}
+          headerTintColor={headerTintColor}
+          buttonTextColor={buttonTextColor}
         />
         <SelectListContent
           options={options}
@@ -57,6 +61,8 @@ SelectList.defaultProps = {
   placeholder: null,
   closeButtonText: null,
   disableTextSearch: false,
+  headerTintColor: null,
+  buttonTextColor: null,
   ...optionsDefaultProps,
 };
 
@@ -66,6 +72,8 @@ SelectList.propTypes = {
   onCloseModalRequest: PropTypes.func.isRequired,
   onRowSelected: PropTypes.func.isRequired,
   disableTextSearch: PropTypes.bool,
+  headerTintColor: PropTypes.string,
+  buttonTextColor: PropTypes.string,
   ...optionsPropTypes,
 };
 

@@ -54,13 +54,15 @@ class SelectListHeader extends PureComponent {
       disableTextSearch,
       closeButtonText,
       onCloseModalRequest,
+      headerTintColor,
+      buttonTextColor,
     } = this.props;
     const { text } = this.state;
     return (
-      <SelectListHeaderContainer>
+      <SelectListHeaderContainer headerTintColor={headerTintColor}>
         <SelectListHeaderContent>
           <SelectListHeaderCloseButton onPress={onCloseModalRequest}>
-            <SelectListHeaderCloseButtonText numberOfLines={1}>
+            <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
               {closeButtonText}
             </SelectListHeaderCloseButtonText>
           </SelectListHeaderCloseButton>
@@ -87,6 +89,8 @@ class SelectListHeader extends PureComponent {
 SelectListHeader.defaultProps = {
   placeholder: null,
   closeButtonText: 'Close',
+  headerTintColor: null,
+  buttonTextColor: null,
 };
 
 SelectListHeader.propTypes = {
@@ -95,6 +99,8 @@ SelectListHeader.propTypes = {
   onCloseModalRequest: PropTypes.func.isRequired,
   onHeaderInputChangeText: PropTypes.func.isRequired,
   disableTextSearch: PropTypes.bool.isRequired,
+  headerTintColor: PropTypes.string,
+  buttonTextColor: PropTypes.string,
 };
 
 export default SelectListHeader;

@@ -45,6 +45,8 @@ const App = () => {
 | pageSize | Number | Number of rows returned by every page request of the provider.
 | inputName | String | The key where the value of the header input text will be stored in the filter object that is passed down to the provider function.
 | filter | Object/Function | Filter is a object(or function that returns a object) that represents all the conditional values to be used by the provider function when it make the data requests.
+| headerTintColor | String | Custom color for header background
+| buttonTextColor | String | Custom color for header text labels
 
 # Options object format
 The options (from the static list or from the resolver returned value) must be an object containing the following key definitions:

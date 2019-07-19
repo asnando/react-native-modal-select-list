@@ -2,20 +2,21 @@ import styled from 'styled-components';
 
 const SELECT_LIST_HEADER_CONTAINER_HEIGHT = 112;
 const SELECT_LIST_HEADER_INPUT_SIZE = 38;
-const SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE = 24;
+const SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE = 20;
 const SELECT_LIST_HEADER_INPUT_FONT_SIZE = 16;
 const SELECT_LIST_HEADER_CLOSE_BUTTON_SIZE = 56;
 const SELECT_LIST_HEADER_INPUT_BORDER_RADIUS = 8;
 const SELECT_LIST_HEADER_CONTAINER_TINT_COLOR = '#EEE';
 const SELECT_LIST_HEADER_BORDER_COLOR = '#DDD';
 const SELECT_LIST_HEADER_BUTTON_COLOR = '#DDD';
-const SELECT_LIST_HEADER_CLEAR_BUTTON_COLOR = '#EEE';
-const SELECT_LIST_HEADER_CLEAR_BUTTON_TEXT_COLOR = '#606060';
+const SELECT_LIST_HEADER_CLEAR_BUTTON_COLOR = '#aaa';
+const SELECT_LIST_HEADER_CLEAR_BUTTON_TEXT_COLOR = '#eee';
+const SELECT_LIST_HEADER_CLOSE_BUTTON_TEXT_COLOR = '#000';
 
 export const SelectListHeaderContainer = styled.SafeAreaView`
   width: 100%;
   height: ${SELECT_LIST_HEADER_CONTAINER_HEIGHT};
-  background-color: ${SELECT_LIST_HEADER_CONTAINER_TINT_COLOR};
+  background-color: ${({ headerTintColor }) => headerTintColor || SELECT_LIST_HEADER_CONTAINER_TINT_COLOR};
   align-items: center;
   border-bottom-width: 1;
   border-color: ${SELECT_LIST_HEADER_BORDER_COLOR};
@@ -39,6 +40,8 @@ export const SelectListHeaderCloseButton = styled.TouchableOpacity`
 
 export const SelectListHeaderCloseButtonText = styled.Text`
   text-transform: uppercase;
+  font-weight: bold;
+  color: ${({ buttonTextColor }) => buttonTextColor || SELECT_LIST_HEADER_CLOSE_BUTTON_TEXT_COLOR};
 `;
 
 export const SelectListHeaderInputContainer = styled.View`
@@ -66,11 +69,15 @@ export const SelectListHeaderInputClearButton = styled.TouchableOpacity`
   height: ${SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE};
   background-color: ${SELECT_LIST_HEADER_CLEAR_BUTTON_COLOR};
   border-radius: ${SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE / 2};
-  align-items: center;
-  justify-content: center;
+  opacity: 0.6;
 `;
 
 export const SelectListHeaderInputClearButtonText = styled.Text`
   color: ${SELECT_LIST_HEADER_CLEAR_BUTTON_TEXT_COLOR};
   font-weight: bold;
+  font-size: 12;
+  line-height: ${SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE - 2};
+  text-align: center;
+  width: ${SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE};
+  height: ${SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE};
 `;

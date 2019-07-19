@@ -29,9 +29,7 @@ const createStaticModalOptions = () => {
   return options;
 };
 
-const modalOptionsProvider = (args) => {
-  console.log(args);
-  const { page, pageSize, text } = args;
+const modalOptionsProvider = ({ page, pageSize, customFilterKey }) => {
   let options = [];
   for (let i = 0; i < pageSize; i++) {
     const randomString = createRandomString();
@@ -41,8 +39,8 @@ const modalOptionsProvider = (args) => {
       value: randomString,
     });
   }
-  if (!!text) {
-    options = options.filter(option => new RegExp(`^.*?(${text}).*?$`).test(option.label));
+  if (!!customFilterKey) {
+    options = options.filter(option => new RegExp(`^.*?(${customFilterKey}).*?$`).test(option.label));
   }
   return new Promise(resolve => setTimeout(() => resolve(options), 1000));
 };
@@ -76,6 +74,8 @@ const App = () => {
         pageSize={40}
         inputName="customFilterKey"
         filter={resolveFilters}
+        headerTintColor="purple"
+        buttonTextColor="white"
       />
     </Fragment>
   );
