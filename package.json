@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "️☝️ React Native modal component to select options from list",
   "main": "src/index.js",
-  "repository": "https://github.com/ffrm/react-native-modal-options.git",
+  "repository": "https://github.com/ffrm/react-native-modal-select-list.git",
   "author": "Fernando Rama <fernandorama.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
