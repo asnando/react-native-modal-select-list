@@ -30,10 +30,8 @@ SelectListRow.defaultProps = {
 
 SelectListRow.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  // eslint-disable-next-line react/forbid-prop-types
+  value: PropTypes.any,
   onRowSelected: PropTypes.func.isRequired,
 };
 

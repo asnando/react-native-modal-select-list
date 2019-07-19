@@ -11,8 +11,11 @@ import {
   SelectListHeaderInputClearButtonText,
 } from './SelectListHeader.styles';
 
+const USER_EDITION_WAIT_INTERVAL = 300;
+
 const initialState = {
   text: '',
+  onUserEditionEnd: null,
 };
 
 class SelectListHeader extends PureComponent {
@@ -22,40 +25,65 @@ class SelectListHeader extends PureComponent {
   }
 
   handleChangeText(text) {
-    return this.setState({ text });
+    const { onUserEditionEnd } = this.state;
+    // Updates the inputed text into state.
+    this.setState({ text });
+    // Clear any user edition timer that is already running.
+    clearTimeout(onUserEditionEnd);
+    this.setState({
+      onUserEditionEnd: setTimeout(
+        this.handleUserEndedEdition.bind(this),
+        USER_EDITION_WAIT_INTERVAL,
+      ),
+    });
+  }
+
+  handleUserEndedEdition() {
+    const { text } = this.state;
+    const { onHeaderInputChangeText } = this.props;
+    onHeaderInputChangeText(text);
   }
 
   clearText() {
     return this.handleChangeText(initialState.text);
   }
 
+  handleCloseButtonPress() {
+    const { onCloseModalRequest } = this.props;
+    onCloseModalRequest();
+  }
+
   render() {
     const {
       placeholder,
+      disableTextSearch,
       closeButtonText,
-      onCloseModalRequest,
+      headerTintColor,
+      buttonTextColor,
     } = this.props;
     const { text } = this.state;
     return (
-      <SelectListHeaderContainer>
+      <SelectListHeaderContainer headerTintColor={headerTintColor}>
         <SelectListHeaderContent>
-          <SelectListHeaderCloseButton onPress={onCloseModalRequest}>
-            <SelectListHeaderCloseButtonText numberOfLines={1}>
+          <SelectListHeaderCloseButton onPress={() => this.handleCloseButtonPress()}>
+            <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
               {closeButtonText}
             </SelectListHeaderCloseButtonText>
           </SelectListHeaderCloseButton>
-          <SelectListHeaderInputContainer>
-            <SelectListHeaderInput
-              placeholder={placeholder}
-              value={text}
-              onChangeText={(...args) => this.handleChangeText(...args)}
-            />
-            { !!text && (
-              <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
-                <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
-              </SelectListHeaderInputClearButton>
-            )}
-          </SelectListHeaderInputContainer>
+          { !disableTextSearch && (
+            <SelectListHeaderInputContainer>
+              <SelectListHeaderInput
+                placeholder={placeholder}
+                value={text}
+                onChangeText={(...args) => this.handleChangeText(...args)}
+              />
+              { !!text && (
+                <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
+                  <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
+                </SelectListHeaderInputClearButton>
+              )}
+            </SelectListHeaderInputContainer>
+          )}
         </SelectListHeaderContent>
       </SelectListHeaderContainer>
     );
@@ -65,12 +93,18 @@ class SelectListHeader extends PureComponent {
 SelectListHeader.defaultProps = {
   placeholder: null,
   closeButtonText: 'Close',
+  headerTintColor: null,
+  buttonTextColor: null,
 };
 
 SelectListHeader.propTypes = {
   placeholder: PropTypes.string,
   closeButtonText: PropTypes.string,
   onCloseModalRequest: PropTypes.func.isRequired,
+  onHeaderInputChangeText: PropTypes.func.isRequired,
+  disableTextSearch: PropTypes.bool.isRequired,
+  headerTintColor: PropTypes.string,
+  buttonTextColor: PropTypes.string,
 };
 
 export default SelectListHeader;
