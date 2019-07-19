@@ -18,8 +18,20 @@ const initialState = {
 
 const filterOptionsListByText = (text, options) => {
   const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
-  return options.filter(({ label }) => rgxpFilterByText.test(label));
+  return options.map((option) => {
+    // eslint-disable-next-line no-param-reassign
+    option.visible = rgxpFilterByText.test(option.label);
+    return option;
+  });
 };
+
+const mapVisiblePropertyToOptions = options => options.map((option) => {
+  if (typeof option.visible === 'undefined') {
+    // eslint-disable-next-line no-param-reassign
+    option.visible = true;
+  }
+  return option;
+});
 
 class SelectListContent extends PureComponent {
   constructor(props) {
@@ -46,10 +58,7 @@ class SelectListContent extends PureComponent {
 
   getOptionsFromStaticList() {
     const { options } = this.props;
-    return this.setState({
-      options,
-      loading: false,
-    });
+    return this.setOptionsList(options, this.setLoadingStatus.bind(this, false));
   }
 
   getOptionsFromProvider(text) {
@@ -109,14 +118,33 @@ class SelectListContent extends PureComponent {
 
   setOptionsList(options, callback) {
     return this.setState({
-      options,
+      options: mapVisiblePropertyToOptions(options),
     }, callback);
+  }
+
+  // We need to reset the static options visibility before every
+  // modal hide event. Otherwise, the last selected option
+  // from the list will be the only displayed in the list.
+  modalWillHide() {
+    const optionsProviderType = this.whichOptionsProviderType();
+    if (optionsProviderType === 'static') {
+      this.resetOptionsListVisibility();
+    }
+  }
+
+  resetOptionsListVisibility() {
+    const { options } = this.state;
+    return this.setOptionsList(options.map((option) => {
+      // eslint-disable-next-line no-param-reassign
+      option.visible = true;
+      return option;
+    }));
   }
 
   addOptionsToList(options, callback) {
     const { options: prevStateOptions } = this.state;
     return this.setState({
-      options: prevStateOptions.concat(options),
+      options: mapVisiblePropertyToOptions(prevStateOptions.concat(options)),
     }, callback);
   }
 
@@ -169,7 +197,7 @@ class SelectListContent extends PureComponent {
 
   renderRow({ item }) {
     const { onRowSelected } = this.props;
-    return <SelectListRow {...item} onRowSelected={onRowSelected} />;
+    return item.visible && (<SelectListRow {...item} onRowSelected={onRowSelected} />);
   }
 
   renderFooter() {
@@ -185,6 +213,7 @@ class SelectListContent extends PureComponent {
       <SelectListContentContainer>
         <FlatList
           data={options}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={(...args) => this.renderRow(...args)}
           ListFooterComponent={() => this.renderFooter()}
           onEndReached={() => this.handleEndListReached()}

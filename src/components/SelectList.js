@@ -17,6 +17,11 @@ class SelectList extends PureComponent {
     this.content = ref;
   }
 
+  modalWillHide() {
+    const { content: contentComponent } = this;
+    return contentComponent.modalWillHide();
+  }
+
   render() {
     const {
       placeholder,

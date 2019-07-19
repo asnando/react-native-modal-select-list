@@ -15,12 +15,20 @@ class ModalSelectList extends PureComponent {
     this.state = initialState;
   }
 
+  modalWillHide(callback) {
+    const { selectList: selectListComponent } = this;
+    selectListComponent.modalWillHide();
+    callback();
+  }
+
   show(callback) {
     return this.setState({ visible: true }, callback);
   }
 
   dismiss(callback) {
-    return this.setState({ visible: false }, callback);
+    this.modalWillHide(() => {
+      this.setState({ visible: false }, callback);
+    });
   }
 
   handleModalCloseRequest() {
@@ -36,6 +44,10 @@ class ModalSelectList extends PureComponent {
     });
   }
 
+  saveListRef(ref) {
+    this.selectList = ref;
+  }
+
   render() {
     const { visible } = this.state;
     const { props } = this;
@@ -43,6 +55,7 @@ class ModalSelectList extends PureComponent {
       <Modal visible={visible} animationType="slide">
         <SelectList
           {...props}
+          ref={(...args) => this.saveListRef(...args)}
           onCloseModalRequest={() => this.handleModalCloseRequest()}
           onRowSelected={(...args) => this.handleRowSelection(...args)}
         />

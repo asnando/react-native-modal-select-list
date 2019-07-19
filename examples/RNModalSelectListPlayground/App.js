@@ -70,10 +70,10 @@ const App = () => {
         options={staticModalOptions}
         onSelectedOption={onSelectedOption}
         disableTextSearch={false}
-        provider={modalOptionsProvider}
-        pageSize={40}
-        inputName="customFilterKey"
-        filter={resolveFilters}
+        // provider={modalOptionsProvider}
+        // pageSize={40}
+        // inputName="customFilterKey"
+        // filter={resolveFilters}
         headerTintColor="purple"
         buttonTextColor="white"
       />

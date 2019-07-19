@@ -48,12 +48,16 @@ class SelectListHeader extends PureComponent {
     return this.handleChangeText(initialState.text);
   }
 
+  handleCloseButtonPress() {
+    const { onCloseModalRequest } = this.props;
+    onCloseModalRequest();
+  }
+
   render() {
     const {
       placeholder,
       disableTextSearch,
       closeButtonText,
-      onCloseModalRequest,
       headerTintColor,
       buttonTextColor,
     } = this.props;
@@ -61,7 +65,7 @@ class SelectListHeader extends PureComponent {
     return (
       <SelectListHeaderContainer headerTintColor={headerTintColor}>
         <SelectListHeaderContent>
-          <SelectListHeaderCloseButton onPress={onCloseModalRequest}>
+          <SelectListHeaderCloseButton onPress={() => this.handleCloseButtonPress()}>
             <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
               {closeButtonText}
             </SelectListHeaderCloseButtonText>
