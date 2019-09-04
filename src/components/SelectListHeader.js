@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   SelectListHeaderContainer,
@@ -58,6 +59,7 @@ class SelectListHeader extends PureComponent {
       placeholder,
       disableTextSearch,
       closeButtonText,
+      closeButtonComponent,
       headerTintColor,
       buttonTextColor,
     } = this.props;
@@ -65,10 +67,19 @@ class SelectListHeader extends PureComponent {
     return (
       <SelectListHeaderContainer headerTintColor={headerTintColor}>
         <SelectListHeaderContent>
-          <SelectListHeaderCloseButton onPress={() => this.handleCloseButtonPress()}>
-            <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
-              {closeButtonText}
-            </SelectListHeaderCloseButtonText>
+          <SelectListHeaderCloseButton
+            onPress={() => this.handleCloseButtonPress()}
+          >
+            {closeButtonComponent ? (
+              <View>{closeButtonComponent}</View>
+            ) : (
+              <SelectListHeaderCloseButtonText
+                numberOfLines={1}
+                buttonTextColor={buttonTextColor}
+              >
+                {closeButtonText}
+              </SelectListHeaderCloseButtonText>
+            )}
           </SelectListHeaderCloseButton>
           { !disableTextSearch && (
             <SelectListHeaderInputContainer>
@@ -93,6 +104,7 @@ class SelectListHeader extends PureComponent {
 SelectListHeader.defaultProps = {
   placeholder: null,
   closeButtonText: 'Close',
+  closeButtonComponent: false,
   headerTintColor: null,
   buttonTextColor: null,
 };
