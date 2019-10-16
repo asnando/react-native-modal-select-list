@@ -3,9 +3,9 @@ import styled from 'styled-components';
 const SELECT_LIST_HEADER_CONTAINER_HEIGHT = 60;
 const SELECT_LIST_HEADER_INPUT_SIZE = 38;
 const SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE = 20;
-const SELECT_LIST_HEADER_INPUT_FONT_SIZE = 16;
+const SELECT_LIST_HEADER_INPUT_FONT_SIZE = 14;
 const SELECT_LIST_HEADER_CLOSE_BUTTON_SIZE = 56;
-const SELECT_LIST_HEADER_INPUT_BORDER_RADIUS = 8;
+const SELECT_LIST_HEADER_INPUT_BORDER_RADIUS = 0;
 const SELECT_LIST_HEADER_CONTAINER_TINT_COLOR = '#EEE';
 const SELECT_LIST_HEADER_BORDER_COLOR = '#DDD';
 const SELECT_LIST_HEADER_BUTTON_COLOR = '#DDD';
@@ -41,13 +41,13 @@ export const SelectListHeaderCloseButton = styled.TouchableOpacity`
 export const SelectListHeaderCloseButtonText = styled.Text`
   text-transform: uppercase;
   font-weight: bold;
+  margin-right: 10;
   color: ${({ buttonTextColor }) => buttonTextColor || SELECT_LIST_HEADER_CLOSE_BUTTON_TEXT_COLOR};
 `;
 
 export const SelectListHeaderInputContainer = styled.View`
   flex: 1;
   height: ${SELECT_LIST_HEADER_INPUT_SIZE};
-  margin-left: 16;
   flex-direction: row;
   align-items: center;
   background-color: #FFF;
