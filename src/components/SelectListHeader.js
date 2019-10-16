@@ -10,12 +10,14 @@ import {
   SelectListHeaderInputClearButton,
   SelectListHeaderInputClearButtonText,
 } from './SelectListHeader.styles';
+import { ActivityIndicator } from 'react-native';
 
 const USER_EDITION_WAIT_INTERVAL = 300;
 
 const initialState = {
   text: '',
   onUserEditionEnd: null,
+  isLoading: false,
 };
 
 class SelectListHeader extends PureComponent {
@@ -41,6 +43,25 @@ class SelectListHeader extends PureComponent {
   handleUserEndedEdition() {
     const { text } = this.state;
     const { onHeaderInputChangeText } = this.props;
+
+    if(text.length == 0) {
+      onHeaderInputChangeText(text);
+    }
+  }
+
+  handleUserSubmit() {
+    const { text } = this.state;
+    const { onHeaderInputChangeText } = this.props;
+
+    this.setState({
+      isLoading: true,
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          isLoading: false
+        })
+      }, 5000)
+    })
     onHeaderInputChangeText(text);
   }
 
@@ -70,16 +91,20 @@ class SelectListHeader extends PureComponent {
               {closeButtonText}
             </SelectListHeaderCloseButtonText>
           </SelectListHeaderCloseButton>
-          { !disableTextSearch && (
+          {!disableTextSearch && (
             <SelectListHeaderInputContainer>
               <SelectListHeaderInput
                 placeholder={placeholder}
                 value={text}
                 onChangeText={(...args) => this.handleChangeText(...args)}
+                onSubmitEditing={() => this.handleUserSubmit()}
               />
-              { !!text && (
+              {!!text && (
                 <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
-                  <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
+                  {this.state.isLoading ?
+                    <ActivityIndicator /> :
+                    <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
+                  }
                 </SelectListHeaderInputClearButton>
               )}
             </SelectListHeaderInputContainer>
