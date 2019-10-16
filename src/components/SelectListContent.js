@@ -14,20 +14,25 @@ const initialState = {
   loading: true,
   canLoadMoreOptions: true,
   options: [],
+  filteredOptions: []
 };
 
 const filterOptionsListByText = (text, options) => {
   const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
-  return options.map((option) => {
-    // eslint-disable-next-line no-param-reassign
-    option.visible = rgxpFilterByText.test(option.label);
+  let optionFiltered = [];
+
+  options.map((option, key) => {
+    if(rgxpFilterByText.test(option.label)) {
+      optionFiltered.push(option)
+    } 
     return option;
   });
+
+  return optionFiltered
 };
 
 const mapVisiblePropertyToOptions = options => options.map((option) => {
   if (typeof option.visible === 'undefined') {
-    // eslint-disable-next-line no-param-reassign
     option.visible = true;
   }
   return option;
@@ -97,7 +102,7 @@ class SelectListContent extends PureComponent {
     if (value && typeof value.then === 'function') {
       return value.then((options) => {
         return this.addOptionsToList(options, () => {
-          return this.setLoadingStatus(false, () => {
+          return this.setLoadingStatus(true, () => {
             // If provider returned less data than expected,
             // then disable the load of more options.
             if (options.length < pageSize) {
@@ -133,12 +138,9 @@ class SelectListContent extends PureComponent {
   }
 
   resetOptionsListVisibility() {
-    const { options } = this.state;
-    return this.setOptionsList(options.map((option) => {
-      // eslint-disable-next-line no-param-reassign
-      option.visible = true;
-      return option;
-    }));
+    const { options } = this.props;
+
+    return this.setOptionsList(options);
   }
 
   addOptionsToList(options, callback) {
@@ -162,6 +164,11 @@ class SelectListContent extends PureComponent {
 
   filterOptionsListByText(text) {
     const { options } = this.state;
+
+    if(text.length == 0) {
+      return this.setOptionsList(this.props.options);
+    }
+
     return this.setOptionsList(filterOptionsListByText(text, options));
   }
 
