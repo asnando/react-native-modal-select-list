@@ -1,85 +1,135 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import optionsDefaultProps from  '../constants/optionsDefaultProps';
-import optionsPropTypes from '../constants/optionsPropTypes';
 import {
-  SelectListContainer,
-} from './SelectList.styles';
-import SelectListHeader from './SelectListHeader';
-import SelectListContent from './SelectListContent';
+  SelectListHeaderContainer,
+  SelectListHeaderContent,
+  SelectListHeaderCloseButton,
+  SelectListHeaderCloseButtonText,
+  SelectListHeaderInputContainer,
+  SelectListHeaderInput,
+  SelectListHeaderInputClearButton,
+  SelectListHeaderInputClearButtonText,
+} from './SelectListHeader.styles';
+import { ActivityIndicator } from 'react-native';
 
-class SelectList extends PureComponent {
-  handleHeaderInputChangeText(value) {
-    this.content.onHeaderInputChangeText(value);
+const USER_EDITION_WAIT_INTERVAL = 300;
+
+const initialState = {
+  text: '',
+  onUserEditionEnd: null,
+  isLoading: false,
+};
+
+class SelectListHeader extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = initialState;
   }
 
-  saveContentComponentRef(ref) {
-    this.content = ref;
+  handleChangeText(text) {
+    const { onUserEditionEnd } = this.state;
+    // Updates the inputed text into state.
+    this.setState({ text });
+    // Clear any user edition timer that is already running.
+    clearTimeout(onUserEditionEnd);
+    this.setState({
+      onUserEditionEnd: setTimeout(
+        this.handleUserEndedEdition.bind(this),
+        USER_EDITION_WAIT_INTERVAL,
+      ),
+    });
   }
 
-  modalWillHide() {
-    const { content: contentComponent } = this;
-    return contentComponent.modalWillHide();
+  handleUserEndedEdition() {
+    const { text } = this.state;
+    const { onHeaderInputChangeText } = this.props;
+
+    if(text.length == 0) {
+      onHeaderInputChangeText(text);
+    }
+  }
+
+  handleUserSubmit() {
+    const { text } = this.state;
+    const { onHeaderInputChangeText } = this.props;
+
+    this.setState({
+      isLoading: true,
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          isLoading: false
+        })
+      }, 5000)
+    })
+    onHeaderInputChangeText(text);
+  }
+
+  clearText() {
+    return this.handleChangeText(initialState.text);
+  }
+
+  handleCloseButtonPress() {
+    const { onCloseModalRequest } = this.props;
+    onCloseModalRequest();
   }
 
   render() {
     const {
       placeholder,
-      closeButtonText,
-      onCloseModalRequest,
-      onRowSelected,
-      options,
-      provider,
-      pageSize,
-      inputName,
-      filter,
       disableTextSearch,
+      closeButtonText,
       headerTintColor,
       buttonTextColor,
     } = this.props;
+    const { text } = this.state;
     return (
-      <SelectListContainer>
-        <SelectListHeader
-          placeholder={placeholder}
-          closeButtonText={closeButtonText}
-          disableTextSearch={disableTextSearch}
-          onCloseModalRequest={onCloseModalRequest}
-          onHeaderInputChangeText={(...args) => this.handleHeaderInputChangeText(...args)}
-          headerTintColor={headerTintColor}
-          buttonTextColor={buttonTextColor}
-        />
-        <SelectListContent
-          options={options}
-          provider={provider}
-          pageSize={pageSize}
-          inputName={inputName}
-          filter={filter}
-          onRowSelected={onRowSelected}
-          ref={(...args) => this.saveContentComponentRef(...args)}
-        />
-      </SelectListContainer>
+      <SelectListHeaderContainer headerTintColor={headerTintColor}>
+        <SelectListHeaderContent>
+          <SelectListHeaderCloseButton onPress={() => this.handleCloseButtonPress()}>
+            <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
+              {closeButtonText}
+            </SelectListHeaderCloseButtonText>
+          </SelectListHeaderCloseButton>
+          {!disableTextSearch && (
+            <SelectListHeaderInputContainer>
+              <SelectListHeaderInput
+                placeholder={placeholder}
+                value={text}
+                onChangeText={(...args) => this.handleChangeText(...args)}
+                onSubmitEditing={() => this.handleUserSubmit()}
+              />
+              {!!text && (
+                <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
+                  {this.state.isLoading ?
+                    <ActivityIndicator /> :
+                    <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
+                  }
+                </SelectListHeaderInputClearButton>
+              )}
+            </SelectListHeaderInputContainer>
+          )}
+        </SelectListHeaderContent>
+      </SelectListHeaderContainer>
     );
   }
 }
 
-SelectList.defaultProps = {
+SelectListHeader.defaultProps = {
   placeholder: null,
-  closeButtonText: null,
-  disableTextSearch: false,
+  closeButtonText: 'Close',
   headerTintColor: null,
   buttonTextColor: null,
-  ...optionsDefaultProps,
 };
 
-SelectList.propTypes = {
+SelectListHeader.propTypes = {
   placeholder: PropTypes.string,
   closeButtonText: PropTypes.string,
   onCloseModalRequest: PropTypes.func.isRequired,
-  onRowSelected: PropTypes.func.isRequired,
-  disableTextSearch: PropTypes.bool,
+  onHeaderInputChangeText: PropTypes.func.isRequired,
+  disableTextSearch: PropTypes.bool.isRequired,
   headerTintColor: PropTypes.string,
   buttonTextColor: PropTypes.string,
-  ...optionsPropTypes,
 };
 
-export default SelectList;
+export default SelectListHeader;
