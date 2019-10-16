@@ -1,135 +1,243 @@
 import React, { PureComponent } from 'react';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
+import optionsDefaultProps from '../constants/optionsDefaultProps';
+import optionPropTypes from '../constants/optionsPropTypes';
 import {
-  SelectListHeaderContainer,
-  SelectListHeaderContent,
-  SelectListHeaderCloseButton,
-  SelectListHeaderCloseButtonText,
-  SelectListHeaderInputContainer,
-  SelectListHeaderInput,
-  SelectListHeaderInputClearButton,
-  SelectListHeaderInputClearButtonText,
-} from './SelectListHeader.styles';
-import { ActivityIndicator } from 'react-native';
-
-const USER_EDITION_WAIT_INTERVAL = 300;
+  SelectListContentContainer,
+  SelectListActivityIndicator,
+} from './SelectListContent.styles';
+import SelectListRow from './SelectListRow';
 
 const initialState = {
-  text: '',
-  onUserEditionEnd: null,
-  isLoading: false,
+  page: 1,
+  loading: true,
+  canLoadMoreOptions: true,
+  options: [],
+  filteredOptions: []
 };
 
-class SelectListHeader extends PureComponent {
+const filterOptionsListByText = (text, options) => {
+  const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
+  let optionFiltered = [];
+
+  options.map((option, key) => {
+    if(rgxpFilterByText.test(option.label)) {
+      optionFiltered.push(option)
+    } 
+    return option;
+  });
+
+  return optionFiltered
+};
+
+const mapVisiblePropertyToOptions = options => options.map((option) => {
+  if (typeof option.visible === 'undefined') {
+    option.visible = true;
+  }
+  return option;
+});
+
+class SelectListContent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = initialState;
   }
 
-  handleChangeText(text) {
-    const { onUserEditionEnd } = this.state;
-    // Updates the inputed text into state.
-    this.setState({ text });
-    // Clear any user edition timer that is already running.
-    clearTimeout(onUserEditionEnd);
-    this.setState({
-      onUserEditionEnd: setTimeout(
-        this.handleUserEndedEdition.bind(this),
-        USER_EDITION_WAIT_INTERVAL,
-      ),
-    });
+  componentDidMount() {
+    this.resolveOptions();
   }
 
-  handleUserEndedEdition() {
-    const { text } = this.state;
-    const { onHeaderInputChangeText } = this.props;
+  // Will be called from the parent component when
+  // the modal header input change the text value.
+  onHeaderInputChangeText(text) {
+    const optionsProviderType = this.whichOptionsProviderType();
+    if (optionsProviderType === 'static') {
+      return this.filterOptionsListByText(text);
+    }
+    if (optionsProviderType === 'provider') {
+      return this.reset(this.getOptionsFromProvider.bind(this, text));
+    }
+    return null;
+  }
 
-    if(text.length == 0) {
-      onHeaderInputChangeText(text);
+  getOptionsFromStaticList() {
+    const { options } = this.props;
+    return this.setOptionsList(options, this.setLoadingStatus.bind(this, false));
+  }
+
+  getOptionsFromProvider(text) {
+    const { page } = this.state;
+
+    const {
+      provider,
+      pageSize,
+      inputName,
+      filter,
+    } = this.props;
+
+    let providerOptions = {
+      page,
+      pageSize,
+      [inputName]: text,
+    };
+
+    // Extends the object containing additional filter keys
+    // to pass down to the provider function.
+    if (filter !== null && typeof filter !== 'undefined') {
+      if (typeof filter === 'function') {
+        providerOptions = {
+          ...providerOptions,
+          ...filter(),
+        };
+      }
+      providerOptions = {
+        ...providerOptions,
+        ...filter,
+      };
+    }
+
+    const value = provider(providerOptions);
+
+    if (value && typeof value.then === 'function') {
+      return value.then((options) => {
+        return this.addOptionsToList(options, () => {
+          return this.setLoadingStatus(true, () => {
+            // If provider returned less data than expected,
+            // then disable the load of more options.
+            if (options.length < pageSize) {
+              this.setState({ canLoadMoreOptions: false });
+            }
+          });
+        });
+      });
+    }
+    return this.addOptionsToList(value, this.setLoadingStatus.bind(this, false));
+  }
+
+  setLoadingStatus(status, callback) {
+    return this.setState({
+      loading: status,
+    }, callback);
+  }
+
+  setOptionsList(options, callback) {
+    return this.setState({
+      options: mapVisiblePropertyToOptions(options),
+    }, callback);
+  }
+
+  // We need to reset the static options visibility before every
+  // modal hide event. Otherwise, the last selected option
+  // from the list will be the only displayed in the list.
+  modalWillHide() {
+    const optionsProviderType = this.whichOptionsProviderType();
+    if (optionsProviderType === 'static') {
+      this.resetOptionsListVisibility();
     }
   }
 
-  handleUserSubmit() {
-    const { text } = this.state;
-    const { onHeaderInputChangeText } = this.props;
+  resetOptionsListVisibility() {
+    const { options } = this.props;
 
+    return this.setOptionsList(options);
+  }
+
+  addOptionsToList(options, callback) {
+    const { options: prevStateOptions } = this.state;
+    return this.setState({
+      options: mapVisiblePropertyToOptions(prevStateOptions.concat(options)),
+    }, callback);
+  }
+
+  reset(callback) {
+    return this.setState(initialState, callback);
+  }
+
+  whichOptionsProviderType() {
+    const { provider } = this.props;
+    if (typeof provider === 'function') {
+      return 'provider';
+    }
+    return 'static';
+  }
+
+  filterOptionsListByText(text) {
+    const { options } = this.state;
+
+    if(text.length == 0) {
+      return this.setOptionsList(this.props.options);
+    }
+
+    return this.setOptionsList(filterOptionsListByText(text, options));
+  }
+
+  resolveOptions() {
+    const optionsProviderType = this.whichOptionsProviderType();
+    switch (optionsProviderType) {
+      case 'static':
+        return this.getOptionsFromStaticList();
+      case 'provider':
+        return this.getOptionsFromProvider();
+      default:
+        break;
+    }
+    return null;
+  }
+
+  handleEndListReached() {
+    const optionsProviderType = this.whichOptionsProviderType();
+    if (optionsProviderType === 'provider') {
+      this.requestNextPage();
+    }
+  }
+
+  requestNextPage() {
+    const { page, loading, canLoadMoreOptions } = this.state;
+    // Abort if already loading
+    if (loading || !canLoadMoreOptions) return;
     this.setState({
-      isLoading: true,
-    }, () => {
-      setTimeout(() => {
-        this.setState({
-          isLoading: false
-        })
-      }, 5000)
-    })
-    onHeaderInputChangeText(text);
+      loading: true,
+      page: page + 1,
+    }, this.getOptionsFromProvider.bind(this));
   }
 
-  clearText() {
-    return this.handleChangeText(initialState.text);
+  renderRow({ item }) {
+    const { onRowSelected } = this.props;
+    return item.visible && (<SelectListRow {...item} onRowSelected={onRowSelected} />);
   }
 
-  handleCloseButtonPress() {
-    const { onCloseModalRequest } = this.props;
-    onCloseModalRequest();
+  renderFooter() {
+    const { loading } = this.state;
+    return loading && (
+      <SelectListActivityIndicator size="large" />
+    );
   }
 
   render() {
-    const {
-      placeholder,
-      disableTextSearch,
-      closeButtonText,
-      headerTintColor,
-      buttonTextColor,
-    } = this.props;
-    const { text } = this.state;
+    const { options } = this.state;
     return (
-      <SelectListHeaderContainer headerTintColor={headerTintColor}>
-        <SelectListHeaderContent>
-          <SelectListHeaderCloseButton onPress={() => this.handleCloseButtonPress()}>
-            <SelectListHeaderCloseButtonText numberOfLines={1} buttonTextColor={buttonTextColor}>
-              {closeButtonText}
-            </SelectListHeaderCloseButtonText>
-          </SelectListHeaderCloseButton>
-          {!disableTextSearch && (
-            <SelectListHeaderInputContainer>
-              <SelectListHeaderInput
-                placeholder={placeholder}
-                value={text}
-                onChangeText={(...args) => this.handleChangeText(...args)}
-                onSubmitEditing={() => this.handleUserSubmit()}
-              />
-              {!!text && (
-                <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
-                  {this.state.isLoading ?
-                    <ActivityIndicator /> :
-                    <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
-                  }
-                </SelectListHeaderInputClearButton>
-              )}
-            </SelectListHeaderInputContainer>
-          )}
-        </SelectListHeaderContent>
-      </SelectListHeaderContainer>
+      <SelectListContentContainer>
+        <FlatList
+          data={options}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(...args) => this.renderRow(...args)}
+          ListFooterComponent={() => this.renderFooter()}
+          onEndReached={() => this.handleEndListReached()}
+          onEndReachedThreshold={1}
+        />
+      </SelectListContentContainer>
     );
   }
 }
 
-SelectListHeader.defaultProps = {
-  placeholder: null,
-  closeButtonText: 'Close',
-  headerTintColor: null,
-  buttonTextColor: null,
+SelectListContent.defaultProps = {
+  ...optionsDefaultProps,
 };
 
-SelectListHeader.propTypes = {
-  placeholder: PropTypes.string,
-  closeButtonText: PropTypes.string,
-  onCloseModalRequest: PropTypes.func.isRequired,
-  onHeaderInputChangeText: PropTypes.func.isRequired,
-  disableTextSearch: PropTypes.bool.isRequired,
-  headerTintColor: PropTypes.string,
-  buttonTextColor: PropTypes.string,
+SelectListContent.propTypes = {
+  ...optionPropTypes,
+  onRowSelected: PropTypes.func.isRequired,
 };
 
-export default SelectListHeader;
+export default SelectListContent;
