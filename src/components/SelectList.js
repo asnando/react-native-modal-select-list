@@ -7,6 +7,9 @@ import {
 } from './SelectList.styles';
 import SelectListHeader from './SelectListHeader';
 import SelectListContent from './SelectListContent';
+import {
+  SafeAreaView
+} from 'react-native';
 
 class SelectList extends PureComponent {
   handleHeaderInputChangeText(value) {
@@ -38,26 +41,28 @@ class SelectList extends PureComponent {
       buttonTextColor,
     } = this.props;
     return (
-      <SelectListContainer>
-        <SelectListHeader
-          placeholder={placeholder}
-          closeButtonText={closeButtonText}
-          disableTextSearch={disableTextSearch}
-          onCloseModalRequest={onCloseModalRequest}
-          onHeaderInputChangeText={(...args) => this.handleHeaderInputChangeText(...args)}
-          headerTintColor={headerTintColor}
-          buttonTextColor={buttonTextColor}
-        />
-        <SelectListContent
-          options={options}
-          provider={provider}
-          pageSize={pageSize}
-          inputName={inputName}
-          filter={filter}
-          onRowSelected={onRowSelected}
-          ref={(...args) => this.saveContentComponentRef(...args)}
-        />
-      </SelectListContainer>
+      <SafeAreaView>
+        <SelectListContainer>
+          <SelectListHeader
+            placeholder={placeholder}
+            closeButtonText={closeButtonText}
+            disableTextSearch={disableTextSearch}
+            onCloseModalRequest={onCloseModalRequest}
+            onHeaderInputChangeText={(...args) => this.handleHeaderInputChangeText(...args)}
+            headerTintColor={headerTintColor}
+            buttonTextColor={buttonTextColor}
+          />
+          <SelectListContent
+            options={options}
+            provider={provider}
+            pageSize={pageSize}
+            inputName={inputName}
+            filter={filter}
+            onRowSelected={onRowSelected}
+            ref={(...args) => this.saveContentComponentRef(...args)}
+          />
+        </SelectListContainer>
+      </SafeAreaView>
     );
   }
 }
