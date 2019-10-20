@@ -41,7 +41,7 @@ class SelectList extends PureComponent {
       buttonTextColor,
     } = this.props;
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
         <SelectListContainer>
           <SelectListHeader
             placeholder={placeholder}
