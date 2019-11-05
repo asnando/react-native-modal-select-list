@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   SelectListRowContainer,
   SelectListRowText,
+  SelectListRowContainerDisabled,
 } from './SelectListRow.styles';
 
 class SelectListRow extends PureComponent {
@@ -12,13 +13,20 @@ class SelectListRow extends PureComponent {
   }
 
   render() {
-    const { label } = this.props;
+    const { label, visible } = this.props;
     return (
-      <SelectListRowContainer onPress={() => this.handleRowSelection()}>
-        <SelectListRowText numberOfLines={1}>
-          {label}
-        </SelectListRowText>
-      </SelectListRowContainer>
+      <SelectListRowContainerDisabled>
+        {visible === true ?
+          <SelectListRowContainer onPress={() => this.handleRowSelection()}>
+            <SelectListRowText numberOfLines={1}>
+              {label}
+            </SelectListRowText>
+          </SelectListRowContainer> :
+          <SelectListRowText numberOfLines={1}>
+            {label}
+          </SelectListRowText>
+        }
+      </SelectListRowContainerDisabled>
     );
   }
 }
@@ -26,12 +34,14 @@ class SelectListRow extends PureComponent {
 SelectListRow.defaultProps = {
   label: '',
   value: null,
+  visible: false,
 };
 
 SelectListRow.propTypes = {
   label: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
+  visible: PropTypes.bool,
   onRowSelected: PropTypes.func.isRequired,
 };
 
