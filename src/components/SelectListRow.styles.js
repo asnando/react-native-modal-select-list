@@ -12,6 +12,13 @@ export const SelectListRowContainer = styled.TouchableOpacity`
   justify-content: center;
 `;
 
+export const SelectListRowContainerDisabled = styled.View`
+  width: 100%;
+  height: ${SELECT_LIST_ROW_HEIGHT};
+  background-color: #FFF;
+  justify-content: center;
+`;
+
 export const SelectListRowText = styled.Text`
   font-size: ${SELECT_LIST_ROW_TEXT_FONT_SIZE};
   padding-left: 16;
