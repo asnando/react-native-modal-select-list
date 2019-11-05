@@ -17,20 +17,6 @@ const initialState = {
   filteredOptions: []
 };
 
-const filterOptionsListByText = (text, options) => {
-  const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
-  let optionFiltered = [];
-
-  options.map((option, key) => {
-    if(rgxpFilterByText.test(option.label)) {
-      optionFiltered.push(option)
-    } 
-    return option;
-  });
-
-  return optionFiltered
-};
-
 const mapVisiblePropertyToOptions = options => options.map((option) => {
   if (typeof option.visible === 'undefined') {
     option.visible = true;
@@ -47,6 +33,27 @@ class SelectListContent extends PureComponent {
   componentDidMount() {
     this.resolveOptions();
   }
+
+  extendedFilterOptionsListByText = (text, options) => {
+    const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
+    
+    const { messageNotFound } = this.props;
+    let message = messageNotFound ? messageNotFound : "Data tidak ditemukan!!";
+
+    let optionFiltered = [];
+
+    options.map((option, key) => {
+      if (rgxpFilterByText.test(option.label)) {
+        optionFiltered.push(option)
+      }
+    });
+
+    if (options.length > 0 && optionFiltered == 0) {
+      optionFiltered.push({ label: message, value: message, visible: "disabled" });
+    }
+
+    return optionFiltered
+  };
 
   // Will be called from the parent component when
   // the modal header input change the text value.
@@ -74,6 +81,7 @@ class SelectListContent extends PureComponent {
       pageSize,
       inputName,
       filter,
+      messageNotFound
     } = this.props;
 
     let providerOptions = {
@@ -98,11 +106,19 @@ class SelectListContent extends PureComponent {
     }
 
     const value = provider(providerOptions);
+    
+    let message = messageNotFound ? messageNotFound : "Data tidak ditemukan!!";
 
     if (value && typeof value.then === 'function') {
       return value.then((options) => {
+        //here 
+        if (options.length == 0) {
+          options.push({ label: message, value: message, visible: "disabled" });
+        }
+        
         return this.addOptionsToList(options, () => {
-          return this.setLoadingStatus(true, () => {
+
+          return this.setLoadingStatus(false, () => {
             // If provider returned less data than expected,
             // then disable the load of more options.
             if (options.length < pageSize) {
@@ -165,11 +181,11 @@ class SelectListContent extends PureComponent {
   filterOptionsListByText(text) {
     const { options } = this.state;
 
-    if(text.length == 0) {
+    if (text.length == 0) {
       return this.setOptionsList(this.props.options);
     }
 
-    return this.setOptionsList(filterOptionsListByText(text, options));
+    return this.setOptionsList(this.extendedFilterOptionsListByText(text, options));
   }
 
   resolveOptions() {
