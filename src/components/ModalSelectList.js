@@ -32,6 +32,11 @@ class ModalSelectList extends PureComponent {
   }
 
   handleModalCloseRequest() {
+    const { onCloseModalRequest } = this.props;
+    if(typeof onCloseModalRequest == "function") {
+      onCloseModalRequest();
+    }
+
     return this.dismiss();
   }
 
