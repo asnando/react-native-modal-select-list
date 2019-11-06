@@ -48,7 +48,7 @@ class SelectListContent extends PureComponent {
       }
     });
 
-    if (options.length > 0 && optionFiltered == 0) {
+    if (options.length > 0 && optionFiltered == 0 && text.length > 0) {
       optionFiltered.push({ label: message, value: message, visible: "disabled" });
     }
 
@@ -112,12 +112,11 @@ class SelectListContent extends PureComponent {
     if (value && typeof value.then === 'function') {
       return value.then((options) => {
         //here 
-        if (options.length == 0) {
+        if (options.length == 0 && text.length > 0) {
           options.push({ label: message, value: message, visible: "disabled" });
         }
         
         return this.addOptionsToList(options, () => {
-
           return this.setLoadingStatus(false, () => {
             // If provider returned less data than expected,
             // then disable the load of more options.
