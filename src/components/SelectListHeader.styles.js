@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const SELECT_LIST_HEADER_CONTAINER_HEIGHT = 60;
-const SELECT_LIST_HEADER_INPUT_SIZE = 38;
+const SELECT_LIST_HEADER_INPUT_SIZE = 50;
 const SELECT_LIST_HEADER_INPUT_CLEAR_BUTTON_SIZE = 20;
 const SELECT_LIST_HEADER_INPUT_FONT_SIZE = 14;
 const SELECT_LIST_HEADER_CLOSE_BUTTON_SIZE = 56;
@@ -27,6 +27,14 @@ export const SelectListHeaderContent = styled.View`
   width: 90%;
   flex-direction: row;
   flex-direction: row;
+  align-items: center;
+`;
+
+export const SelectListButtonContainer = styled.View`
+  margin-right: 10;
+`;
+
+export const SelectListButton = styled.Button`
   align-items: center;
 `;
 
