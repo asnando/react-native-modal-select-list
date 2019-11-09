@@ -7,8 +7,6 @@ export const SelectListRowContainer = styled.TouchableOpacity`
   width: 100%;
   height: ${SELECT_LIST_ROW_HEIGHT};
   background-color: #FFF;
-  border-bottom-width: 1;
-  border-color: #EEE;
   justify-content: center;
 `;
 
@@ -22,4 +20,13 @@ export const SelectListRowContainerDisabled = styled.View`
 export const SelectListRowText = styled.Text`
   font-size: ${SELECT_LIST_ROW_TEXT_FONT_SIZE};
   padding-left: 16;
+`;
+
+export const SelectListRowButtonContainer = styled.View`
+  margin-top: 15;
+  margin-left: 10
+`;
+
+export const SelectListRowButton = styled.Button`
+
 `;
