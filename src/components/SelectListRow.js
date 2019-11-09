@@ -4,7 +4,10 @@ import {
   SelectListRowContainer,
   SelectListRowText,
   SelectListRowContainerDisabled,
+  SelectListRowButton,
+  SelectListRowButtonContainer,
 } from './SelectListRow.styles';
+import { ScrollView } from 'react-native';
 
 class SelectListRow extends PureComponent {
   handleRowSelection() {
@@ -15,18 +18,23 @@ class SelectListRow extends PureComponent {
   render() {
     const { label, visible } = this.props;
     return (
-      <SelectListRowContainerDisabled>
-        {visible === true ?
-          <SelectListRowContainer onPress={() => this.handleRowSelection()}>
+      <ScrollView horizontal={true} style={{ borderBottomWidth: 1, borderBottomColor: "#eee" }}>
+        <SelectListRowButtonContainer>
+          <SelectListRowButton onPress={() => this.handleRowSelection()} title={"Pilih"} />
+        </SelectListRowButtonContainer>
+        <SelectListRowContainerDisabled>
+          {visible === true ?
+            <SelectListRowContainer onPress={() => this.handleRowSelection()}>
+              <SelectListRowText numberOfLines={1}>
+                {label}
+              </SelectListRowText>
+            </SelectListRowContainer> :
             <SelectListRowText numberOfLines={1}>
               {label}
             </SelectListRowText>
-          </SelectListRowContainer> :
-          <SelectListRowText numberOfLines={1}>
-            {label}
-          </SelectListRowText>
-        }
-      </SelectListRowContainerDisabled>
+          }
+        </SelectListRowContainerDisabled>
+      </ScrollView>
     );
   }
 }
