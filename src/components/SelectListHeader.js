@@ -9,8 +9,10 @@ import {
   SelectListHeaderInput,
   SelectListHeaderInputClearButton,
   SelectListHeaderInputClearButtonText,
+  SelectListButton,
+  SelectListButtonContainer,
 } from './SelectListHeader.styles';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 
 const USER_EDITION_WAIT_INTERVAL = 300;
 
@@ -44,7 +46,7 @@ class SelectListHeader extends PureComponent {
     const { text } = this.state;
     const { onHeaderInputChangeText } = this.props;
 
-    if(text.length == 0) {
+    if (text.length == 0) {
       onHeaderInputChangeText(text);
     }
   }
@@ -94,19 +96,14 @@ class SelectListHeader extends PureComponent {
           {!disableTextSearch && (
             <SelectListHeaderInputContainer>
               <SelectListHeaderInput
-                placeholder={placeholder}
+                placeholder={placeholder.length == 0 ? "Input pencarian anda" : placeholder}
                 value={text}
                 onChangeText={(...args) => this.handleChangeText(...args)}
                 onSubmitEditing={() => this.handleUserSubmit()}
               />
-              {!!text && (
-                <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
-                  {this.state.isLoading ?
-                    <ActivityIndicator /> :
-                    <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
-                  }
-                </SelectListHeaderInputClearButton>
-              )}
+              <SelectListButtonContainer>
+                <SelectListButton onPress={() => this.handleUserSubmit()} title={"Cari"} />
+              </SelectListButtonContainer>
             </SelectListHeaderInputContainer>
           )}
         </SelectListHeaderContent>
@@ -117,7 +114,7 @@ class SelectListHeader extends PureComponent {
 
 SelectListHeader.defaultProps = {
   placeholder: null,
-  closeButtonText: 'Close',
+  closeButtonText: 'Tutup',
   headerTintColor: null,
   buttonTextColor: null,
 };
