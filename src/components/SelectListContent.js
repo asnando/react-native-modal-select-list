@@ -11,7 +11,7 @@ import SelectListRow from './SelectListRow';
 
 const initialState = {
   page: 1,
-  loading: true,
+  loading: false,
   canLoadMoreOptions: true,
   options: [],
   filteredOptions: []
@@ -74,6 +74,9 @@ class SelectListContent extends PureComponent {
   }
 
   getOptionsFromProvider(text) {
+    if(text && text.length > 0)
+      this.setLoadingStatus(true);
+
     const { page } = this.state;
 
     const {
