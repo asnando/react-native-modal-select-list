@@ -19,9 +19,11 @@ class SelectListRow extends PureComponent {
     const { label, visible } = this.props;
     return (
       <ScrollView horizontal={true} style={{ borderBottomWidth: 1, borderBottomColor: "#eee" }}>
-        <SelectListRowButtonContainer>
-          <SelectListRowButton onPress={() => this.handleRowSelection()} title={"Pilih"} />
-        </SelectListRowButtonContainer>
+        {visible != "disabled" &&
+          <SelectListRowButtonContainer>
+            <SelectListRowButton onPress={() => this.handleRowSelection()} title={"Pilih"} />
+          </SelectListRowButtonContainer>
+        }
         <SelectListRowContainerDisabled>
           {visible === true ?
             <SelectListRowContainer onPress={() => this.handleRowSelection()}>
