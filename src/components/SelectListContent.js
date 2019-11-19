@@ -8,6 +8,7 @@ import {
   SelectListActivityIndicator,
 } from './SelectListContent.styles';
 import SelectListRow from './SelectListRow';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const initialState = {
   page: 1,
@@ -36,7 +37,7 @@ class SelectListContent extends PureComponent {
 
   extendedFilterOptionsListByText = (text, options) => {
     const rgxpFilterByText = new RegExp(`^.*?(${text}).*?$`, 'i');
-    
+
     const { messageNotFound } = this.props;
     let message = messageNotFound ? messageNotFound : "Data tidak ditemukan!!";
 
@@ -74,7 +75,7 @@ class SelectListContent extends PureComponent {
   }
 
   getOptionsFromProvider(text) {
-    if(text && text.length > 0)
+    if (text && text.length > 0)
       this.setLoadingStatus(true);
 
     const { page } = this.state;
@@ -109,7 +110,7 @@ class SelectListContent extends PureComponent {
     }
 
     const value = provider(providerOptions);
-    
+
     let message = messageNotFound ? messageNotFound : "Data tidak ditemukan!!";
 
     if (value && typeof value.then === 'function') {
@@ -118,7 +119,7 @@ class SelectListContent extends PureComponent {
         if (options.length == 0 && text.length > 0) {
           options.push({ label: message, value: message, visible: "disabled" });
         }
-        
+
         return this.addOptionsToList(options, () => {
           return this.setLoadingStatus(false, () => {
             // If provider returned less data than expected,
@@ -222,28 +223,27 @@ class SelectListContent extends PureComponent {
 
   renderRow({ item }) {
     const { onRowSelected } = this.props;
-    return item.visible && (<SelectListRow {...item} onRowSelected={onRowSelected} />);
-  }
-
-  renderFooter() {
-    const { loading } = this.state;
-    return loading && (
-      <SelectListActivityIndicator size="large" />
+    return item.visible && (
+      <SelectListRow {...item} onRowSelected={onRowSelected} />
     );
   }
 
   render() {
-    const { options } = this.state;
+    const { options, loading } = this.state;
     return (
       <SelectListContentContainer>
-        <FlatList
-          data={options}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={(...args) => this.renderRow(...args)}
-          ListFooterComponent={() => this.renderFooter()}
-          onEndReached={() => this.handleEndListReached()}
-          onEndReachedThreshold={1}
-        />
+        {loading &&
+          <SelectListActivityIndicator size="large" />
+        }
+        <ScrollView horizontal={true} style={{ borderBottomWidth: 1, borderBottomColor: "#eee" }}>
+          <FlatList
+            data={options}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={(...args) => this.renderRow(...args)}
+            onEndReached={() => this.handleEndListReached()}
+            onEndReachedThreshold={1}
+          />
+        </ScrollView>
       </SelectListContentContainer>
     );
   }
