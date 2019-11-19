@@ -7,7 +7,7 @@ import {
   SelectListRowButton,
   SelectListRowButtonContainer,
 } from './SelectListRow.styles';
-import { View } from 'react-native';
+import { View, Dimensions } from 'react-native';
 
 class SelectListRow extends PureComponent {
   handleRowSelection() {
@@ -17,8 +17,17 @@ class SelectListRow extends PureComponent {
 
   render() {
     const { label, visible } = this.props;
+    let stylesContainer = { 
+      borderBottomWidth: 1, 
+      flexDirection: "row", 
+      borderBottomColor: "#eee" 
+    }
+
+    if (label.length < 50) 
+      stylesContainer.width = Dimensions.get("window").width;
+
     return (
-      <View style={{ borderBottomWidth: 1, flexDirection: "row", borderBottomColor: "#eee" }}>
+      <View style={stylesContainer}>
         {visible != "disabled" &&
           <SelectListRowButtonContainer>
             <SelectListRowButton onPress={() => this.handleRowSelection()} title={"Pilih"} />
