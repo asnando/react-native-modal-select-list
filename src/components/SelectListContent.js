@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import optionsDefaultProps from '../constants/optionsDefaultProps';
 import optionPropTypes from '../constants/optionsPropTypes';
@@ -8,7 +8,6 @@ import {
   SelectListActivityIndicator,
 } from './SelectListContent.styles';
 import SelectListRow from './SelectListRow';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const initialState = {
   page: 1,
@@ -235,7 +234,7 @@ class SelectListContent extends PureComponent {
         {loading &&
           <SelectListActivityIndicator size="large" />
         }
-        <ScrollView horizontal={true} style={{ borderBottomWidth: 1, borderBottomColor: "#eee" }}>
+        <ScrollView horizontal={true} style={{width: Dimensions.get("window").width,  borderBottomWidth: 1, borderBottomColor: "#eee" }}>
           <FlatList
             data={options}
             keyExtractor={(item, index) => index.toString()}
