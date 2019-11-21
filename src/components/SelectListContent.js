@@ -48,7 +48,7 @@ class SelectListContent extends PureComponent {
       }
     });
 
-    if (options.length > 0 && optionFiltered == 0 && text.length > 0) {
+    if (options.length > 0 && optionFiltered.length == 0 && text.length > 0) {
       optionFiltered.push({ label: message, value: message, visible: "disabled" });
     }
 
