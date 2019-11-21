@@ -181,10 +181,10 @@ class SelectListContent extends PureComponent {
   }
 
   filterOptionsListByText(text) {
-    const { options } = this.state;
+    const { options } = this.props;
 
     if (text.length == 0) {
-      return this.setOptionsList(this.props.options);
+      return this.setOptionsList(options);
     }
 
     return this.setOptionsList(this.extendedFilterOptionsListByText(text, options));
