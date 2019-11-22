@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList, ScrollView, Dimensions } from 'react-native';
+import { FlatList, ScrollView, Dimensions, View, Text, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import optionsDefaultProps from '../constants/optionsDefaultProps';
 import optionPropTypes from '../constants/optionsPropTypes';
@@ -114,6 +114,7 @@ class SelectListContent extends PureComponent {
 
     if (value && typeof value.then === 'function') {
       return value.then((options) => {
+        // this.setLoadingStatus(true);
         //here 
         if (options.length == 0 && text.length > 0) {
           options.push({ label: message, value: message, visible: "disabled" });
@@ -231,10 +232,7 @@ class SelectListContent extends PureComponent {
     const { options, loading } = this.state;
     return (
       <SelectListContentContainer>
-        {loading &&
-          <SelectListActivityIndicator size="large" />
-        }
-        <ScrollView horizontal={true} style={{width: Dimensions.get("window").width,  borderBottomWidth: 1, borderBottomColor: "#eee" }}>
+        <ScrollView horizontal={true} style={{ width: Dimensions.get("window").width, borderBottomWidth: 1, borderBottomColor: "#eee" }}>
           <FlatList
             data={options}
             keyExtractor={(item, index) => index.toString()}
@@ -243,6 +241,13 @@ class SelectListContent extends PureComponent {
             onEndReachedThreshold={1}
           />
         </ScrollView>
+        {loading &&
+          <View style={{ position: "absolute", width: 50, height: 50, right: 15, bottom: 5}}>
+            <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <ActivityIndicator size={35} />
+            </View>
+          </View>
+        }
       </SelectListContentContainer>
     );
   }
