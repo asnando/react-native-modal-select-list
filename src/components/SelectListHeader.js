@@ -87,12 +87,8 @@ class SelectListHeader extends PureComponent {
                 placeholder={placeholder}
                 value={text}
                 onChangeText={(...args) => this.handleChangeText(...args)}
+                clearButtonMode="while-editing"
               />
-              { !!text && (
-                <SelectListHeaderInputClearButton onPress={() => this.clearText()}>
-                  <SelectListHeaderInputClearButtonText>x</SelectListHeaderInputClearButtonText>
-                </SelectListHeaderInputClearButton>
-              )}
             </SelectListHeaderInputContainer>
           )}
         </SelectListHeaderContent>
