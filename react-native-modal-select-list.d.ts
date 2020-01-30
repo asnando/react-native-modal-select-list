@@ -20,6 +20,7 @@ declare module "react-native-modal-select-list" {
     pageSize?: number;
     placeholder?: string;
     provider?: () => void | Promise<ModalSelectListOption[]>;
+    numberOfLines?: number;
   }
 
   export class ModalSelectList extends Component<ModalSelectListProps> {
