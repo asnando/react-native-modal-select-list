@@ -195,13 +195,15 @@ class SelectListContent extends PureComponent {
     }, this.getOptionsFromProvider.bind(this));
   }
 
-  renderRow({ item }) {
+  renderRow(item, index, count) {
+    const isLastRow = index === (count - 1);
     const { onRowSelected, numberOfLines } = this.props;
     return item.visible && (
       <SelectListRow
         {...item}
         onRowSelected={onRowSelected}
         numberOfLines={numberOfLines}
+        isLastRow={isLastRow}
       />
     );
   }
@@ -220,7 +222,7 @@ class SelectListContent extends PureComponent {
         <FlatList
           data={options}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={(...args) => this.renderRow(...args)}
+          renderItem={({ item, index }) => this.renderRow(item, index, options.length)}
           ListFooterComponent={() => this.renderFooter()}
           onEndReached={() => this.handleEndListReached()}
           onEndReachedThreshold={1}

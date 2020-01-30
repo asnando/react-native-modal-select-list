@@ -7,7 +7,7 @@ export const SelectListRowContainer = styled.TouchableOpacity`
   width: 100%;
   min-height: ${SELECT_LIST_ROW_HEIGHT};
   background-color: #FFF;
-  border-bottom-width: 1;
+  border-bottom-width: ${({ isLastRow }) => (isLastRow ? 0 : 1)};
   border-color: #EEE;
   justify-content: center;
 `;

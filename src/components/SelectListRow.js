@@ -12,9 +12,9 @@ class SelectListRow extends PureComponent {
   }
 
   render() {
-    const { label, numberOfLines } = this.props;
+    const { label, numberOfLines, isLastRow } = this.props;
     return (
-      <SelectListRowContainer onPress={() => this.handleRowSelection()}>
+      <SelectListRowContainer onPress={() => this.handleRowSelection()} isLastRow={isLastRow}>
         <SelectListRowText numberOfLines={numberOfLines}>
           {label}
         </SelectListRowText>
@@ -27,6 +27,7 @@ SelectListRow.defaultProps = {
   label: '',
   value: null,
   numberOfLines: 1,
+  isLastRow: false,
 };
 
 SelectListRow.propTypes = {
@@ -35,6 +36,7 @@ SelectListRow.propTypes = {
   value: PropTypes.any,
   onRowSelected: PropTypes.func.isRequired,
   numberOfLines: PropTypes.number,
+  isLastRow: PropTypes.bool,
 };
 
 export default SelectListRow;
