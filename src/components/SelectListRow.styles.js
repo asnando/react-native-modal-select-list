@@ -14,5 +14,6 @@ export const SelectListRowContainer = styled.TouchableOpacity`
 
 export const SelectListRowText = styled.Text`
   font-size: ${SELECT_LIST_ROW_TEXT_FONT_SIZE};
+  padding-right: 16;
   padding-left: 16;
 `;
