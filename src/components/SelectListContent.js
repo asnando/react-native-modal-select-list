@@ -196,8 +196,14 @@ class SelectListContent extends PureComponent {
   }
 
   renderRow({ item }) {
-    const { onRowSelected } = this.props;
-    return item.visible && (<SelectListRow {...item} onRowSelected={onRowSelected} />);
+    const { onRowSelected, numberOfLines } = this.props;
+    return item.visible && (
+      <SelectListRow
+        {...item}
+        onRowSelected={onRowSelected}
+        numberOfLines={numberOfLines}
+      />
+    );
   }
 
   renderFooter() {

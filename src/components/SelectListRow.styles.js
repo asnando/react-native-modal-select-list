@@ -5,7 +5,7 @@ const SELECT_LIST_ROW_TEXT_FONT_SIZE = 16;
 
 export const SelectListRowContainer = styled.TouchableOpacity`
   width: 100%;
-  height: ${SELECT_LIST_ROW_HEIGHT};
+  min-height: ${SELECT_LIST_ROW_HEIGHT};
   background-color: #FFF;
   border-bottom-width: 1;
   border-color: #EEE;
@@ -14,6 +14,9 @@ export const SelectListRowContainer = styled.TouchableOpacity`
 
 export const SelectListRowText = styled.Text`
   font-size: ${SELECT_LIST_ROW_TEXT_FONT_SIZE};
+  padding-top: 16;
   padding-right: 16;
+  padding-bottom: 16;
   padding-left: 16;
+  line-height: 32;
 `;

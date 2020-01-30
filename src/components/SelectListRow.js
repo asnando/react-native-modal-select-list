@@ -12,10 +12,10 @@ class SelectListRow extends PureComponent {
   }
 
   render() {
-    const { label } = this.props;
+    const { label, numberOfLines } = this.props;
     return (
       <SelectListRowContainer onPress={() => this.handleRowSelection()}>
-        <SelectListRowText numberOfLines={1}>
+        <SelectListRowText numberOfLines={numberOfLines}>
           {label}
         </SelectListRowText>
       </SelectListRowContainer>
@@ -26,6 +26,7 @@ class SelectListRow extends PureComponent {
 SelectListRow.defaultProps = {
   label: '',
   value: null,
+  numberOfLines: 1,
 };
 
 SelectListRow.propTypes = {
@@ -33,6 +34,7 @@ SelectListRow.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
   onRowSelected: PropTypes.func.isRequired,
+  numberOfLines: PropTypes.number,
 };
 
 export default SelectListRow;

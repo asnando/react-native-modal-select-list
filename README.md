@@ -27,6 +27,7 @@ const App = () => {
         onSelectedOption={onSelectedOption}
         disableTextSearch={false}
         provider={modalOptionsProvider}
+        numberOfLines={3}
       />
     </Fragment>
   );
@@ -47,6 +48,7 @@ const App = () => {
 | filter | Object/Function | Filter is a object(or function that returns a object) that represents all the conditional values to be used by the provider function when it make the data requests.
 | headerTintColor | String | Custom color for header background
 | buttonTextColor | String | Custom color for header text labels
+| numberOfLines | Number | Maximum number of lines to display for row text
 
 # Options object format
 The options (from the static list or from the resolver returned value) must be an object containing the following key definitions:

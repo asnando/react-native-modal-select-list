@@ -4,4 +4,5 @@ export default {
   pageSize: 30,
   inputName: 'text',
   filter: () => ({}),
+  numberOfLines: 1,
 };

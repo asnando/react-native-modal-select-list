@@ -36,6 +36,7 @@ class SelectList extends PureComponent {
       disableTextSearch,
       headerTintColor,
       buttonTextColor,
+      numberOfLines,
     } = this.props;
     return (
       <SelectListContainer>
@@ -55,6 +56,7 @@ class SelectList extends PureComponent {
           inputName={inputName}
           filter={filter}
           onRowSelected={onRowSelected}
+          numberOfLines={numberOfLines}
           ref={(...args) => this.saveContentComponentRef(...args)}
         />
       </SelectListContainer>

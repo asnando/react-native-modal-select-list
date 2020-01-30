@@ -30,4 +30,6 @@ export default {
     PropTypes.object,
     PropTypes.func,
   ]),
+  // Maximum number of lines to display for row text.
+  numberOfLines: PropTypes.number,
 };
