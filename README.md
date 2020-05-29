@@ -67,7 +67,7 @@ When provider function is not defined and the component prefers to use the stati
 | Name | Description |
 | ---- | ----------- |
 | show | Shows the select list and wait until the onSelectedOption callback is called to close it.
-| dismiss | Manually dismiss the select list and wait until the onClosedModal callback is called (if provided) to close it.
+| dismiss | Manually dismiss the select list.
 
 # Examples
 See the ```examples/RNModalSelectListPlayground``` app and play with it.
