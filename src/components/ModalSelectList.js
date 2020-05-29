@@ -32,7 +32,12 @@ class ModalSelectList extends PureComponent {
   }
 
   handleModalCloseRequest() {
-    return this.dismiss();
+    const { onClosedModal } = this.props;
+    this.dismiss(() => {
+      if (typeof onClosedModal === 'function') {
+        onClosedModal();
+      }
+    });
   }
 
   handleRowSelection(value) {
@@ -72,6 +77,7 @@ ModalSelectList.defaultProps = {
 ModalSelectList.propTypes = {
   ...optionsPropTypes,
   onSelectedOption: PropTypes.func,
+  onClosedModal: PropTypes.func,
 };
 
 export default ModalSelectList;

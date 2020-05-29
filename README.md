@@ -41,6 +41,7 @@ const App = () => {
 | closeButtonText | String | Text for the modal close button
 | closeButtonComponent | Component | Component for the modal close button (i.e : Svg Icon, Image...)
 | onSelectedOption | Function | Callback that will receive the option value defined in the option definition object. Will be called when user selects one of the rows.
+| onClosedModal | Function | Callback that will be called if the user closes the modal without a selection.
 | disableTextSearch | Boolean | If must not display the header text input
 | options[***](#options-object-format) | Array[Object] | Options is an array with static objects to be displayed in the list. Each option object must have a label (to display in the list), and a value which will be returned to the parent component on selection.
 | provider | Function | Provider is a custom function that can be used to fetch any async data. The function can return a promise. The returned value from that function must be in the same format as the options array above.
