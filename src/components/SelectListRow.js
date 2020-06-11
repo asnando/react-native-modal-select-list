@@ -7,8 +7,8 @@ import {
 
 class SelectListRow extends PureComponent {
   handleRowSelection() {
-    const { onRowSelected, value } = this.props;
-    return onRowSelected(value);
+    const { onRowSelected, label, value } = this.props;
+    return onRowSelected(label, value);
   }
 
   render() {
