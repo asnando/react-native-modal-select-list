@@ -40,11 +40,11 @@ class ModalSelectList extends PureComponent {
     });
   }
 
-  handleRowSelection(value) {
+  handleRowSelection(label, value) {
     const { onSelectedOption } = this.props;
     this.dismiss(() => {
       if (typeof onSelectedOption === 'function') {
-        onSelectedOption(value);
+        onSelectedOption(label, value);
       }
     });
   }
