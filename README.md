@@ -13,8 +13,8 @@ const App = () => {
   let modalRef;
   const openModal = () => modalRef.show();
   const saveModalRef = ref => modalRef = ref;
-  const onSelectedOption = value => {
-    console.log(`You selected: ${value}`);
+  const onSelectedOption = (label, value) {
+    console.log(`You selected:  ${label} - ${value}`);
   };
   return (
     <Fragment>
