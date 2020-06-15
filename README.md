@@ -1,5 +1,7 @@
 # React Native Modal Select List
 ![npm](https://img.shields.io/npm/v/react-native-modal-select-list?logo=npm)
+![npm](https://img.shields.io/npm/dm/react-native-modal-select-list)
+![](https://img.shields.io/static/v1?label=style&message=styled-components&color=palevioletred&logo=styled-components)
 
 ☝ React Native modal component to select options from list
 
