@@ -196,10 +196,11 @@ class SelectListContent extends PureComponent {
   }
 
   renderRow(item, index, count) {
+    const Row = this.props.rowComponent ? this.props.rowComponent : SelectListRow;
     const isLastRow = index === (count - 1);
     const { onRowSelected, numberOfLines } = this.props;
     return item.visible && (
-      <SelectListRow
+      <Row
         {...item}
         onRowSelected={onRowSelected}
         numberOfLines={numberOfLines}
