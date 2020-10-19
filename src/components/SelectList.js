@@ -24,8 +24,8 @@ class SelectList extends PureComponent {
   }
 
   render() {
-    const Header = props.customHeader ? props.customHeader : SelectListHeader;
-    const Row = props.customRow ? props.customRow : SelectListRow;
+    const Header = this.props.customHeader ? this.props.customHeader : SelectListHeader;
+    const Row = this.props.customRow ? this.props.customRow : SelectListRow;
     const {
       placeholder,
       closeButtonText,
