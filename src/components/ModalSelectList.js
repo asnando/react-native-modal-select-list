@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Modal } from 'react-native';
+import Modal from 'react-native-modal';
 import PropTypes from 'prop-types';
 import optionsDefaultProps from '../constants/optionsDefaultProps';
 import optionsPropTypes from '../constants/optionsPropTypes';
@@ -57,7 +57,7 @@ class ModalSelectList extends PureComponent {
     const { visible } = this.state;
     const { props } = this;
     return (
-      <Modal visible={visible} animationType="slide">
+      <Modal isVisible={visible} animationType="slide" propagateSwipe={true}>
         <SelectList
           {...props}
           ref={(...args) => this.saveListRef(...args)}
