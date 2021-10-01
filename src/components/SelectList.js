@@ -6,6 +6,7 @@ import {
   SelectListContainer,
 } from './SelectList.styles';
 import SelectListHeader from './SelectListHeader';
+import SelectListRow from './SelectListRow';
 import SelectListContent from './SelectListContent';
 
 class SelectList extends PureComponent {
@@ -23,6 +24,8 @@ class SelectList extends PureComponent {
   }
 
   render() {
+    const Header = this.props.customHeader ? this.props.customHeader : SelectListHeader;
+    const Row = this.props.customRow ? this.props.customRow : SelectListRow;
     const {
       placeholder,
       closeButtonText,
@@ -41,7 +44,7 @@ class SelectList extends PureComponent {
     } = this.props;
     return (
       <SelectListContainer>
-        <SelectListHeader
+        <Header
           placeholder={placeholder}
           closeButtonText={closeButtonText}
           closeButtonComponent={closeButtonComponent}
@@ -59,6 +62,7 @@ class SelectList extends PureComponent {
           filter={filter}
           onRowSelected={onRowSelected}
           numberOfLines={numberOfLines}
+          rowComponent={Row}
           ref={(...args) => this.saveContentComponentRef(...args)}
         />
       </SelectListContainer>

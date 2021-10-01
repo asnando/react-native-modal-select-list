@@ -11,8 +11,9 @@
     "styled-components": "^4.3.2"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-native": "^0.60.4"
+    "react": "^16.8.6||^17",
+    "react-native": "^0.60.4||^0.65",
+    "react-native-modal": "^11.5.6||^13"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

@@ -55,6 +55,8 @@ const App = () => {
 | headerTintColor | String | Custom color for header background
 | buttonTextColor | String | Custom color for header text labels
 | numberOfLines | Number | Maximum number of lines to display for row text
+| customHeader | Component | Custom header component. Refer `src/components/SelectListHeader.js` for implementation details
+| customRow | Component | Custom row component. Refer `src/components/SelectListRow.js` for implementation details
 
 # Options object format
 The options (from the static list or from the resolver returned value) must be an object containing the following key definitions:
